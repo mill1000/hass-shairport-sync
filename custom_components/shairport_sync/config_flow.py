@@ -13,7 +13,6 @@ from .const import DOMAIN
 
 
 class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
-
     async def async_step_user(self, user_input) -> FlowResult:
         errors = {}
         if user_input is not None:
@@ -34,7 +33,7 @@ class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
             data = {
                 CONF_ID: id,
                 CONF_NAME: user_input.get(CONF_NAME),
-                CONF_TOPIC: topic
+                CONF_TOPIC: topic,
             }
 
             # Create a config entry with the config data
@@ -43,10 +42,18 @@ class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
 
         user_input = user_input or {}
 
-        data_schema = vol.Schema({
-            vol.Required(CONF_NAME): cv.string,
-            vol.Required(CONF_TOPIC,
-                         description={"suggested_value": user_input.get(CONF_TOPIC, "Shairport")}): cv.string,
-        })
+        data_schema = vol.Schema(
+            {
+                vol.Required(CONF_NAME): cv.string,
+                vol.Required(
+                    CONF_TOPIC,
+                    description={
+                        "suggested_value": user_input.get(CONF_TOPIC, "Shairport")
+                    },
+                ): cv.string,
+            }
+        )
 
-        return self.async_show_form(step_id="user", data_schema=data_schema, errors=errors)
+        return self.async_show_form(
+            step_id="user", data_schema=data_schema, errors=errors
+        )

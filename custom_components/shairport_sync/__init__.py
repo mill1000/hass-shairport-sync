@@ -10,11 +10,11 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
     # Create platform entries
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(config_entry, "media_player"))
+        hass.config_entries.async_forward_entry_setup(config_entry, "media_player")
+    )
 
     # Reload entry when its updated
-    config_entry.async_on_unload(
-        config_entry.add_update_listener(async_reload_entry))
+    config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
 
     return True
 
