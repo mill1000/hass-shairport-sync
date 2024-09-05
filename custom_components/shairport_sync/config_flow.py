@@ -24,15 +24,15 @@ class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
 
             # Build a "unique" ID from the MQTT topic
             topic = user_input.get(CONF_TOPIC)
-            id = f"shairport-sync-{topic}"
+            uid = f"shairport-sync-{topic}"
 
             # Set ID and fail if already configured
-            await self.async_set_unique_id(id)
+            await self.async_set_unique_id(uid)
             self._abort_if_unique_id_configured()
 
             # Build config data
             data = {
-                CONF_ID: id,
+                CONF_ID: uid,
                 CONF_NAME: user_input.get(CONF_NAME),
                 CONF_TOPIC: topic,
             }
