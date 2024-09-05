@@ -2,17 +2,12 @@
 import hashlib
 import logging
 
-from homeassistant.components.media_player import (
-    PLATFORM_SCHEMA,
-    MediaPlayerDeviceClass,
-    MediaPlayerEntity,
-)
+import voluptuous as vol
+from homeassistant.components.media_player import (PLATFORM_SCHEMA,
+                                                   MediaPlayerDeviceClass,
+                                                   MediaPlayerEntity)
 from homeassistant.components.media_player.const import (
-    MediaPlayerState,
-    MediaPlayerEntityFeature,
-    MediaType,
-)
-
+    MediaPlayerEntityFeature, MediaPlayerState, MediaType)
 from homeassistant.components.mqtt import async_publish, async_subscribe
 from homeassistant.components.mqtt.const import CONF_TOPIC
 from homeassistant.components.mqtt.util import valid_publish_topic
@@ -21,8 +16,6 @@ from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-import voluptuous as vol
-
 
 from .const import DOMAIN, Command, TopLevelTopic
 

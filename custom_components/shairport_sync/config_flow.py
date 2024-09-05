@@ -1,20 +1,24 @@
 """Config flow for Shairport Sync media player."""
 from __future__ import annotations
 
-from homeassistant.config_entries import ConfigFlow
-from homeassistant.const import CONF_ID, CONF_NAME
-from homeassistant.components.mqtt.const import CONF_TOPIC
-from homeassistant.components.mqtt.util import valid_subscribe_topic
-from homeassistant.data_entry_flow import FlowResult
+from typing import Any
+
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+from homeassistant.components.mqtt.const import CONF_TOPIC
+from homeassistant.components.mqtt.util import valid_subscribe_topic
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.const import CONF_ID, CONF_NAME
 
 from .const import DOMAIN
 
 
 class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
-    async def async_step_user(self, user_input) -> FlowResult:
     """Handle config flow for Shairport Sync."""
+
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         errors = {}
         if user_input is not None:
             try:
