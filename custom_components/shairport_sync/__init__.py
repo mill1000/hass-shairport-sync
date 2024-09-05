@@ -20,10 +20,12 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
 
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Unload a Shairport Sync device."""
     await hass.config_entries.async_forward_entry_unload(config_entry, "media_player")
 
     return True
 
 
 async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
+    """Reload a Shairport Sync device."""
     await hass.config_entries.async_reload(config_entry.entry_id)

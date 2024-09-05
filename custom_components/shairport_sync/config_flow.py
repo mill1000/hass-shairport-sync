@@ -14,6 +14,7 @@ from .const import DOMAIN
 
 class ShairportConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input) -> FlowResult:
+    """Handle config flow for Shairport Sync."""
         errors = {}
         if user_input is not None:
             try:
