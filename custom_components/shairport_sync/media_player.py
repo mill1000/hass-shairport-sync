@@ -313,6 +313,3 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
         if self._media_image:
             return (self._media_image, "image/jpeg")
         return (None, None)
-
-
-# todo: reload (https://github.com/custom-components/blueprint/blob/master/custom_components/blueprint/__init__.py)
