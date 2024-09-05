@@ -3,11 +3,16 @@ import hashlib
 import logging
 
 import voluptuous as vol
-from homeassistant.components.media_player import (PLATFORM_SCHEMA,
-                                                   MediaPlayerDeviceClass,
-                                                   MediaPlayerEntity)
+from homeassistant.components.media_player import (
+    PLATFORM_SCHEMA,
+    MediaPlayerDeviceClass,
+    MediaPlayerEntity,
+)
 from homeassistant.components.media_player.const import (
-    MediaPlayerEntityFeature, MediaPlayerState, MediaType)
+    MediaPlayerEntityFeature,
+    MediaPlayerState,
+    MediaType,
+)
 from homeassistant.components.mqtt import async_publish, async_subscribe
 from homeassistant.components.mqtt.const import CONF_TOPIC
 from homeassistant.components.mqtt.util import valid_publish_topic
