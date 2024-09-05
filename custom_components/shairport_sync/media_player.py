@@ -103,7 +103,7 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
     def _set_state(self, state: MediaPlayerState) -> None:
         """Update the player state."""
 
-        _LOGGER.debug(f"Setting state to '{state}'.")
+        _LOGGER.debug("Setting state to '%s'.", state)
         self._player_state = state
 
         # Clear metadata in idle state so media card doesn't display stale data
@@ -140,18 +140,18 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
             """Construct a callback that sets the desired metadata attribute."""
 
             @callback
-            def F(msg) -> None:
+            def _callback(msg) -> None:
                 setattr(self, f"_{attr}", msg.payload)
-                _LOGGER.debug(f"New {attr}: {msg.payload}")
+                _LOGGER.debug("New %s: %s", attr, msg.payload)
 
-            return F
+            return _callback
 
         @callback
         def artwork_updated(message) -> None:
             """Handle the artwork updated MQTT message."""
             # https://en.wikipedia.org/wiki/Magic_number_%28programming%29
             # https://en.wikipedia.org/wiki/List_of_file_signatures
-            header = " ".join("{:02X}".format(b) for b in message.payload[:4])
+            header = " ".join(f"{b:02X}" for b in message.payload[:4])
             _LOGGER.debug(
                 "New artwork (%s bytes); header: %s", len(message.payload), header
             )
@@ -255,7 +255,7 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
 
     async def _send_remote_command(self, command) -> None:
         """Send a command to the remote control topic."""
-        _LOGGER.debug(f"Sending '{command}' command")
+        _LOGGER.debug("Sending '%s' command", command)
         await async_publish(self.hass, self._remote_topic, command)
 
     async def _send_command_update_state(
