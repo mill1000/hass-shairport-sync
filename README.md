@@ -27,7 +27,7 @@ installation. Create the `custom_components` directory if it doesn't exist.
 
 It is available from the main HACS index.
 
-~Add the repository URL as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories).~
+Add the repository URL as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories).
 
 ## Configuration
 
