@@ -26,7 +26,6 @@ good-names=id,i,j,k,ex,Run,_,fp,T,ev
 # wrong-import-order - isort guards this
 disable=
   format,
-  abstract-class-little-used,
   abstract-method,
   cyclic-import,
   duplicate-code,
@@ -60,4 +59,4 @@ ignored-classes=_CountingAttr
 expected-line-ending-format=LF
 
 [EXCEPTIONS]
-overgeneral-exceptions=BaseException,Exception,HomeAssistantError
+overgeneral-exceptions=builtins.HomeAssistantError

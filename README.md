@@ -5,8 +5,9 @@ for [Home Assistant](https://home-assistant.io/) allows you to control and get
 updates from a [Shairport Sync](https://github.com/mikebrady/shairport-sync/)
 installation using [MQTT](https://mqtt.org/).
 
-You need to compile Shairport Sync with at least the MQTT and metadata options,
-for example:
+You need to compile Shairport Sync with at least the MQTT and metadata options.
+
+Example:
 
 ```
  ./configure --with-mqtt-client --with-metadata
@@ -14,22 +15,27 @@ for example:
 
 ## Installation
 
-### Manual
+### Pre-requisites
 
 You need the Home Assistant
 [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) set up.
 
-Copy the `shairport_sync` folder of this repo to
+### HACS
+
+This is the recommended way to install this integration.
+
+It is available from the main HACS index.
+
+### Manual
+
+Copy the `custom_components/shairport_sync` folder of this repo to
 `<config_dir>/custom_components/shairport_sync/` of your Home Assistant
 installation. Create the `custom_components` directory if it doesn't exist.
-
-### HACS
-Add the repository URL as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories).
 
 ## Configuration
 
 ### GUI
-Click the `Add Integration` button and search for Shairport. Enter a friendly name, and the MQTT topic when prompted.
+Click the `Add Integration` button and search for "Shairport". Enter a friendly name, and the MQTT topic when prompted.
 
 ### YAML
 Add the following to your `configuration.yaml`'s `media_player` section
@@ -43,7 +49,7 @@ Home Assistant:
 ```
 
 ### Shairport Sync
-Some important settings required in your `shairport-sync.conf`:
+Some important settings that are required in your `shairport-sync.conf`:
 
 ```
 mqtt =
@@ -60,12 +66,20 @@ mqtt =
 
 ## Compatibility
 
-The current version of this integration has been tested against Shairport Sync 4.1 and Home Assistant Core 2023.1.7 & 2023.3.0.
+The current version of this integration has been tested against Shairport Sync 3.3.7rc1 and Home Assistant Core 2024.10.0.
 
-Version 1.1.1 of this integration has been tested against Shairport Sync 3.3.7rc1 and Home Assistant Core
+### Version 1.3.1
+
+This version has been tested against Shairport Sync 4.1 and Home Assistant Core 2023.1.7 and 2023.3.0.
+
+### Version 1.1.1
+
+This version has been tested against Shairport Sync 3.3.7rc1 and Home Assistant Core
 2021.12.5.
 
-Version 1.0.3 of this integration was tested against Home Assistant 0.114.1 and supported up to version 2021.11.5.
+### Version 1.0.3 
+
+This version has been tested against Home Assistant 0.114.1 and supported up to version 2021.11.5.
 
 Tested Shairport Sync details:
 ```

@@ -1,5 +1,5 @@
 """Provides the constants needed for this component."""
-from homeassistant.backports.enum import StrEnum
+from enum import StrEnum
 
 DOMAIN = "shairport_sync"
 

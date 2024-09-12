@@ -2,17 +2,17 @@
 import hashlib
 import logging
 
+import voluptuous as vol
 from homeassistant.components.media_player import (
     PLATFORM_SCHEMA,
     MediaPlayerDeviceClass,
     MediaPlayerEntity,
 )
 from homeassistant.components.media_player.const import (
-    MediaPlayerState,
     MediaPlayerEntityFeature,
+    MediaPlayerState,
     MediaType,
 )
-
 from homeassistant.components.mqtt import async_publish, async_subscribe
 from homeassistant.components.mqtt.const import CONF_TOPIC
 from homeassistant.components.mqtt.util import valid_publish_topic
@@ -21,8 +21,6 @@ from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-import voluptuous as vol
-
 
 from .const import DOMAIN, Command, TopLevelTopic
 
@@ -46,15 +44,15 @@ SUPPORTED_FEATURES = (
 )
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None) -> None:
+async def async_setup_platform(
+    hass, config, async_add_entities, discovery_info=None
+) -> None:
     """Set up the MQTT media players."""
     _LOGGER.debug(config)
 
-    async_add_entities([ShairportSyncMediaPlayer(
-        hass,
-        config.get(CONF_NAME),
-        config.get(CONF_TOPIC),
-    )])
+    async_add_entities(
+        [ShairportSyncMediaPlayer(hass, config.get(CONF_NAME), config.get(CONF_TOPIC),)]
+    )
 
 
 async def async_setup_entry(
@@ -67,13 +65,9 @@ async def async_setup_entry(
     # Get config from entry
     config = config_entry.data
 
-    async_add_entities([
-        ShairportSyncMediaPlayer(
-            hass,
-            config.get(CONF_NAME),
-            config.get(CONF_TOPIC),
-        )
-    ])
+    async_add_entities(
+        [ShairportSyncMediaPlayer(hass, config.get(CONF_NAME), config.get(CONF_TOPIC),)]
+    )
 
 
 class ShairportSyncMediaPlayer(MediaPlayerEntity):
@@ -107,7 +101,7 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
     def _set_state(self, state: MediaPlayerState) -> None:
         """Update the player state."""
 
-        _LOGGER.debug(f"Setting state to '{state}'.")
+        _LOGGER.debug("Setting state to '%s'.", state)
         self._player_state = state
 
         # Clear metadata in idle state so media card doesn't display stale data
@@ -142,19 +136,20 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
 
         def set_metadata(attr):
             """Construct a callback that sets the desired metadata attribute."""
-            @callback
-            def F(msg) -> None:
-                setattr(self, f"_{attr}", msg.payload)
-                _LOGGER.debug(f"New {attr}: {msg.payload}")
 
-            return F
+            @callback
+            def _callback(msg) -> None:
+                setattr(self, f"_{attr}", msg.payload)
+                _LOGGER.debug("New %s: %s", attr, msg.payload)
+
+            return _callback
 
         @callback
         def artwork_updated(message) -> None:
             """Handle the artwork updated MQTT message."""
             # https://en.wikipedia.org/wiki/Magic_number_%28programming%29
             # https://en.wikipedia.org/wiki/List_of_file_signatures
-            header = " ".join("{:02X}".format(b) for b in message.payload[:4])
+            header = " ".join(f"{b:02X}" for b in message.payload[:4])
             _LOGGER.debug(
                 "New artwork (%s bytes); header: %s", len(message.payload), header
             )
@@ -197,9 +192,7 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
     @property
     def device_info(self) -> dict:
         return {
-            "identifiers": {
-                (DOMAIN, self._base_topic)
-            },
+            "identifiers": {(DOMAIN, self._base_topic)},
             "name": self.name,
             "manufacturer": "mikebrady",
         }
@@ -260,10 +253,12 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
 
     async def _send_remote_command(self, command) -> None:
         """Send a command to the remote control topic."""
-        _LOGGER.debug(f"Sending '{command}' command")
+        _LOGGER.debug("Sending '%s' command", command)
         await async_publish(self.hass, self._remote_topic, command)
 
-    async def _send_command_update_state(self, command: Command, state: MediaPlayerState) -> None:
+    async def _send_command_update_state(
+        self, command: Command, state: MediaPlayerState
+    ) -> None:
         """Send the command and update local state."""
         await self._send_remote_command(command)
         self._set_state(state)
@@ -302,9 +297,13 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
             "Sending toggle play/pause command; currently %s", self._player_state
         )
         if self._player_state == MediaPlayerState.PLAYING:
-            await self._send_command_update_state(Command.PAUSE, MediaPlayerState.PAUSED)
+            await self._send_command_update_state(
+                Command.PAUSE, MediaPlayerState.PAUSED
+            )
         else:
-            await self._send_command_update_state(Command.PLAY, MediaPlayerState.PLAYING)
+            await self._send_command_update_state(
+                Command.PLAY, MediaPlayerState.PLAYING
+            )
 
     async def async_get_media_image(self) -> tuple[str | None, str | None]:
         """Fetch the image of the currently playing media."""
@@ -312,6 +311,3 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
         if self._media_image:
             return (self._media_image, "image/jpeg")
         return (None, None)
-
-
-# todo: reload (https://github.com/custom-components/blueprint/blob/master/custom_components/blueprint/__init__.py)
