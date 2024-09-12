@@ -1,3 +1,8 @@
+## v1.4.0
+### Fixes
+- Home Assistant Core deprecations
+- Python 3.12 compatibility
+
 ## v1.3.1
 ### New
 - Portugese translation for config flow (thanks [ViPeR5000](https://github.com/ViPeR5000)).

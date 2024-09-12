@@ -66,7 +66,7 @@ mqtt =
 
 ## Compatibility
 
-The current version of this integration has been tested against Shairport Sync 4.1 and Home Assistant Core 2024.9.0.
+The current version of this integration has been tested against Shairport Sync 3.3.7rc1 and Home Assistant Core 2024.10.0.
 
 ### Version 1.3.1
 
