@@ -32,3 +32,4 @@ class TopLevelTopic(StrEnum):
     ACTIVE_END = "active_end"
     REMOTE = "remote"
     TITLE = "title"
+    VOLUME = "volume"

@@ -157,6 +157,16 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
             self._media_image = message.payload
             self.async_write_ha_state()
 
+        @callback
+        def volume(message) -> None:
+            """Handle the volume MQTT message."""
+            _LOGGER.debug("Volume %s", message.payload)
+
+            # volume is sent as a string "airplay_volume,volume,lowest_volume,highest_volume"
+            airplay_volume, *_ = message.payload.split(",")
+
+            self._volume = airplay_volume
+
         topic_map = {
             TopLevelTopic.PLAY_START: (play_started, "utf-8"),
             TopLevelTopic.PLAY_RESUME: (play_started, "utf-8"),
@@ -167,6 +177,7 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
             TopLevelTopic.ALBUM: (set_metadata("album"), "utf-8"),
             TopLevelTopic.TITLE: (set_metadata("title"), "utf-8"),
             TopLevelTopic.COVER: (artwork_updated, None),
+            TopLevelTopic.VOLUME: (volume, "utf-8"),
         }
 
         for (top_level_topic, (topic_callback, encoding)) in topic_map.items():
@@ -251,6 +262,11 @@ class ShairportSyncMediaPlayer(MediaPlayerEntity):
     @property
     def device_class(self) -> MediaPlayerDeviceClass:
         return MediaPlayerDeviceClass.SPEAKER
+
+    @property
+    def is_volume_muted(self) -> bool | None:
+        """Return mute state of player."""
+        return self._volume == "-144.0"
 
     async def _send_remote_command(self, command) -> None:
         """Send a command to the remote control topic."""
